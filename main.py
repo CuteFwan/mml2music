@@ -1,35 +1,13 @@
 from pippi import dsp, tune
 import re
-mmls = [
-'''
-t84o5
-r2.l8ba
 
-f+2.ed
-<b2.>ba
-f+2.>dc+
-<b2.ba
+with open('input.mml', 'r') as file:
+    mml = file.read()
 
-f+2.ed
-<b2.>ba
-f+2.>dc+
-<b2.rc-16c+16
-
-dc+c-c+<f+2
-r2.>ed
-edeaf+2
-r2.c-c+
-
-dc+c-c+<f+4>e4
-edc+<ab2
-b2b4a4
-b1
-'''
-]
 
 pattern = r"\/\*[\s\S]*?\*\/|\/\/.*\n|([tlvornabcdefg])([+\-#]?)(\d*)(\.?)|[<>]|&"
 
-matches = re.finditer(pattern, mmls[0])
+matches = re.finditer(pattern, mml)
 
 T = 120
 L = 4
@@ -97,6 +75,8 @@ for m in matches:
             notes.append([pos, freq, length*1.2, [V/8]*2])
             pos += length
 
+print(f'Parsed {len(notes)} notes')
+
 out = dsp.buffer(channels=1)
 
 orig = tune.ntf('A4')
@@ -119,4 +99,5 @@ for pos, F, L, V in notes:
     out.dub(note,pos)       # Write note
     i += 1
 
-out.write(f'renders/kamikotest2.wav')
+out.write(f'renders/output.wav')
+print('Done!')
