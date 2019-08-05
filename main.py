@@ -79,8 +79,45 @@ print(f'Parsed {len(notes)} notes')
 
 out = dsp.buffer(channels=1)
 
-orig = tune.ntf('A4')
-s = dsp.read('sounds/flute440.wav')
+samples = {
+    tune.ntf('A1') : dsp.read('sounds/flute55.wav'),
+    tune.ntf('A2') : dsp.read('sounds/flute110.wav'),
+    tune.ntf('A3') : dsp.read('sounds/flute220.wav'),
+    tune.ntf('A4') : dsp.read('sounds/flute440.wav'),
+    tune.ntf('A5') : dsp.read('sounds/flute880.wav'),
+    tune.ntf('A6') : dsp.read('sounds/flute1760.wav'),
+    tune.ntf('A7') : dsp.read('sounds/flute3520.wav'),
+}
+
+
+def get_nearest_freq(target, freqs):
+    '''Finds the nearest frequency to modulate'''
+    dist = None
+    nearest = None
+    for f in freqs:
+        d = abs(f - target)
+        if d == 0:
+            return f
+        elif dist is None or d < dist:
+            dist = d
+            nearest = f
+    return nearest
+
+def get_next_freq(target, freqs):
+    '''Finds the next highest frequency to modulate lower'''
+    dist = None
+    nearest = None
+    for f in freqs:
+        if f < target:
+            continue
+        d = f - target
+        if d == 0:
+            return f
+        elif dist is None or d < dist:
+            dist = d
+            nearest = f
+    return nearest
+
 
 i = 0
 total = len(notes)
@@ -91,7 +128,12 @@ for pos, F, L, V in notes:
     if (i/total) >= split:
         split += splits
         print(f'{i/total*100:.2f}% {i} / {total}')
-    note = s.speed(F/orig)  # Offset from A4
+
+    nearest = get_nearest_freq(F, samples.keys())   # Find the best frequency to modulate from
+    if nearest is None:
+        continue
+    note = samples[nearest].speed(F/nearest)  # Modulate nearest sample to desired frequency.
+
     if L < note.dur:
         note = note.cut(0, L)   # Chop to length
     note.adsr(0, 0, 1, 10)  # Apply adsr envelope
