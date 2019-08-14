@@ -2,7 +2,7 @@ from pippi import dsp, tune
 import re
 
 with open('input.mml', 'r') as file:
-    mml = file.read()
+    mml = file.read().lower()
 
 
 pattern = r"\/\*[\s\S]*?\*\/|\/\/.*\n|([tlvornabcdefg])([+\-#]?)(\d*)(\.?)|[<>]|&"
