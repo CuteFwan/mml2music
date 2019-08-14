@@ -45,8 +45,11 @@ for m in matches:
     elif m[1] == 'o':
         O = int(m[3])
 
-    elif m[1] in 'abcdefgr':
-        length = 240 / ((int(m[3]) if m[3] else L) * T)
+    elif m[1] in 'abcdefgrn':
+        if m[1] == 'n':
+            length = 240 / (L * T)
+        else:
+            length = 240 / ((int(m[3]) if m[3] else L) * T)
         if dotted or m[4]:
             length *= 1.5
         if tie:
@@ -71,7 +74,11 @@ for m in matches:
                 o = O+1
             else:
                 o = O
-            freq = tune.ntf(note, o)
+            if note == 'n':
+                # Handle midi notes
+                freq = tune.mtof(note+m[3])
+            else:
+                freq = tune.ntf(note, o)
             notes.append([pos, freq, length*1.2, [V/8]*2])
             pos += length
 
