@@ -1,99 +1,27 @@
 from pippi import dsp, tune
 import re
+from mmlparser import MMLParser
 
 with open('input.mml', 'r') as file:
     mml = file.read().lower()
 
+parser = MMLParser()
 
-pattern = r"\/\*[\s\S]*?\*\/|\/\/.*\n|([tlvornabcdefg])([+\-#]?)(\d*)(\.?)|[<>]|&"
-
-matches = re.finditer(pattern, mml)
-
-T = 120
-L = 4
-dotted = False
-V = 8
-O = 4
-tie = False
+notes, length = parser.get_notes(mml)
 
 
-notes = []
-pos = 0
-
-b = ''
-
-
-for m in matches:
-    #print(''.join(f"{f'm[{i}] = {b if not m[i] else m[i]}':15}" for i in range(5)))
-    if m[0].startswith('/'):
-        #comment, ignore
-        continue
-
-    if m[0] == '<':
-        O -= 1
-    elif m[0] == '>':
-        O += 1
-    elif m[0] == '&':
-        tie = True
-    elif m[1] == 't':
-        T = int(m[3])
-    elif m[1] == 'l':
-        L = int(m[3])
-        dotted = bool(m[4])
-    elif m[1] == 'v':
-        V = int(m[3])
-    elif m[1] == 'o':
-        O = int(m[3])
-
-    elif m[1] in 'abcdefgrn':
-        if m[1] == 'n':
-            length = 240 / (L * T)
-        else:
-            length = 240 / ((int(m[3]) if m[3] else L) * T)
-        if dotted or m[4]:
-            length *= 1.5
-        if tie:
-            #tie
-            notes[-1][2] += length
-            tie = False
-            pos += length
-        elif m[1] == 'r':
-            #do nothing, advence position
-            pos += length
-        else:
-            #every other note
-            note = m[1]
-            if m[2] in ['+', '#']:
-                note += '#'
-            elif m[2] == '-':
-                note += 'b'
-
-            if note == 'cb':
-                o = O-1
-            elif note == 'b#':
-                o = O+1
-            else:
-                o = O
-            if note == 'n':
-                # Handle midi notes
-                freq = tune.mtof(note+m[3])
-            else:
-                freq = tune.ntf(note, o)
-            notes.append([pos, freq, length*1.2, [V/8]*2])
-            pos += length
-
-print(f'Parsed {len(notes)} notes')
+print(f'Parsed {len(notes)} notes.\nTotal length: {length}')
 
 out = dsp.buffer(channels=1)
 
 samples = {
-    tune.ntf('A1') : dsp.read('sounds/flute55.wav'),
-    tune.ntf('A2') : dsp.read('sounds/flute110.wav'),
-    tune.ntf('A3') : dsp.read('sounds/flute220.wav'),
-    tune.ntf('A4') : dsp.read('sounds/flute440.wav'),
-    tune.ntf('A5') : dsp.read('sounds/flute880.wav'),
-    tune.ntf('A6') : dsp.read('sounds/flute1760.wav'),
-    tune.ntf('A7') : dsp.read('sounds/flute3520.wav'),
+    tune.ntf('A1') : dsp.read('sounds/flute/55.wav'),
+    tune.ntf('A2') : dsp.read('sounds/flute/110.wav'),
+    tune.ntf('A3') : dsp.read('sounds/flute/220.wav'),
+    tune.ntf('A4') : dsp.read('sounds/flute/440.wav'),
+    tune.ntf('A5') : dsp.read('sounds/flute/880.wav'),
+    tune.ntf('A6') : dsp.read('sounds/flute/1760.wav'),
+    tune.ntf('A7') : dsp.read('sounds/flute/3520.wav'),
 }
 
 
@@ -148,5 +76,5 @@ for pos, F, L, V in notes:
     out.dub(note,pos)       # Write note
     i += 1
 
-out.write(f'renders/output.wav')
+out.write(f'renders/output55.wav')
 print('Done!')
