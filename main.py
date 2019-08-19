@@ -7,10 +7,10 @@ with open('input.mml', 'r') as file:
 
 parser = MMLParser()
 
-notes, length = parser.get_notes(mml)
+track = parser.get_notes(mml)
 
 
-print(f'Parsed {len(notes)} notes.\nTotal length: {length}')
+print(f'Parsed {len(track.notes)} notes.\nTotal length: {track.position}')
 
 out = dsp.buffer(channels=1)
 
@@ -55,26 +55,26 @@ def get_next_freq(target, freqs):
 
 
 i = 0
-total = len(notes)
+total = len(track.notes)
 splits = 0.1
 split = 0
 
-for pos, F, L, V in notes:
+for note in track.notes:
     if (i/total) >= split:
         split += splits
         print(f'{i/total*100:.2f}% {i} / {total}')
 
-    nearest = get_nearest_freq(F, samples.keys())   # Find the best frequency to modulate from
+    nearest = get_nearest_freq(note.frequency, samples.keys())   # Find the best frequency to modulate from
     if nearest is None:
         continue
-    note = samples[nearest].speed(F/nearest)  # Modulate nearest sample to desired frequency.
+    clip = samples[nearest].speed(note.frequency/nearest)  # Modulate nearest sample to desired frequency.
 
-    if L < note.dur:
-        note = note.cut(0, L)   # Chop to length
-    note.adsr(0, 0, 1, 10)  # Apply adsr envelope
-    note *= V               # Apply amp envelope
-    out.dub(note,pos)       # Write note
+    if note.length < clip.dur:
+        clip = clip.cut(0, note.length*1.2)   # Chop to length
+    clip.adsr(0, 0, 1, 10)  # Apply adsr envelope
+    clip *= note.volume               # Apply amp envelope
+    out.dub(clip, note.position)       # Write note
     i += 1
 
-out.write(f'renders/output55.wav')
+out.write(f'renders/output56.wav')
 print('Done!')

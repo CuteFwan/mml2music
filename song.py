@@ -1,5 +1,5 @@
 class Note:
-    __slots__ = (position, frequency, length, volume)
+    __slots__ = ('position', 'frequency', 'length', 'volume')
 
     def __init__(self, position : float, frequency : float, length : float, volume : float):
         self.position = position
