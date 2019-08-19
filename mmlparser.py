@@ -17,13 +17,9 @@ class MMLParser:
         O = 4
         tie = False
 
-
         notes = []
         pos = 0
         track = Track()
-
-
-        b = ''
 
 
         for m in matches:
