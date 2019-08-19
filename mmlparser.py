@@ -60,7 +60,7 @@ class MMLParser:
                 else:
                     #every other note
                     note = m[1]
-                    if m[2] in ['+', '#']:
+                    if m[2] in {'+', '#'}:
                         note += '#'
                     elif m[2] == '-':
                         note += 'b'
