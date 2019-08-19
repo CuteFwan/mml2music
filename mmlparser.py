@@ -1,5 +1,6 @@
 from pippi import tune
 import re
+from song import Note, Track
 
 
 class MMLParser:
@@ -19,6 +20,8 @@ class MMLParser:
 
         notes = []
         pos = 0
+        track = Track()
+
 
         b = ''
 
@@ -53,12 +56,11 @@ class MMLParser:
                     length *= 1.5
                 if tie:
                     #tie
-                    notes[-1][2] += length
+                    track.extend_last(length)
                     tie = False
-                    pos += length
                 elif m[1] == 'r':
                     #do nothing, advence position
-                    pos += length
+                    track.rest(length)
                 else:
                     #every other note
                     note = m[1]
@@ -78,6 +80,5 @@ class MMLParser:
                         freq = tune.mtof(note+m[3])
                     else:
                         freq = tune.ntf(note, o)
-                    notes.append([pos, freq, length*1.2, [V/8]*2])
-                    pos += length
-        return notes, pos
+                    track.add_note(Note(track.position, freq, length, [V/8]*2))
+        return track
