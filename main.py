@@ -1,5 +1,6 @@
 from pippi import dsp, tune
 import re
+import os
 from mmlparser import MMLParser
 
 with open('input.mml', 'r') as file:
@@ -14,15 +15,21 @@ print(f'Parsed {len(track.notes)} notes.\nTotal length: {track.position}')
 
 out = dsp.buffer(channels=1)
 
-samples = {
-    tune.ntf('A1') : dsp.read('sounds/flute/55.wav'),
-    tune.ntf('A2') : dsp.read('sounds/flute/110.wav'),
-    tune.ntf('A3') : dsp.read('sounds/flute/220.wav'),
-    tune.ntf('A4') : dsp.read('sounds/flute/440.wav'),
-    tune.ntf('A5') : dsp.read('sounds/flute/880.wav'),
-    tune.ntf('A6') : dsp.read('sounds/flute/1760.wav'),
-    tune.ntf('A7') : dsp.read('sounds/flute/3520.wav'),
-}
+
+instrument = 'flute'
+
+samples = dict()
+
+instrument_path = f'sounds/{instrument}'
+
+for file in os.listdir(instrument_path):
+    freq = os.path.splitext(file)[0]
+    try:
+        samples[float(freq)] = dsp.read(f'{instrument_path}/{file}')
+    except ValueError:
+        # Not a valid number
+        continue
+
 
 
 def get_nearest_freq(target, freqs):
