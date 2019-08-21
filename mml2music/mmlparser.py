@@ -1,6 +1,6 @@
 from pippi import tune
 import re
-from song import Note, Track
+from .song import Note, Track
 
 
 class MMLParser:
