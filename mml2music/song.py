@@ -28,3 +28,7 @@ class Track:
         for note in self.notes:
             note.position /= mult
             note.length /= mult
+
+    def pitch(self, mult: float):
+        for note in self.notes:
+            note.frequency *= mult
