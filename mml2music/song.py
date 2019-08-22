@@ -14,26 +14,32 @@ class Track:
         self.position = 0
 
     def add_note(self, note: Note):
+        """Add a new note at the end of the track."""
         self.notes.append(note)
         self.position += note.length
 
     def extend_last(self, length: float):
+        """Extend the last note in the track."""
         self.notes[-1].length += length
         self.position += length
 
     def rest(self, length: float):
+        """Add a rest of certain length to the current position of the track."""
         self.position += length
 
     def tempo(self, mult: float):
+        """Modify the tempo of the track independant of the pitch."""
         for note in self.notes:
             note.position /= mult
             note.length /= mult
 
     def pitch(self, mult: float):
+        """Modify the pitch of the track independant of the tempo."""
         for note in self.notes:
             note.frequency *= mult
 
     def speed(self, mult: float):
+        """Modify the tempo and pitch of the track at the same time."""
         for note in self.notes:
             note.position /= mult
             note.length /= mult
