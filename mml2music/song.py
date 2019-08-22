@@ -38,3 +38,7 @@ class Track:
             note.position /= mult
             note.length /= mult
             note.frequency *= mult
+
+    def constrain(self, *, low: float = 0, high: float = 44000):
+        """Constrain the note frequencies of the track fo a certain range."""
+        self.notes = [note for note in self.notes if low <= note.frequency <= high]
