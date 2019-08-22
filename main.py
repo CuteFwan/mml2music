@@ -10,8 +10,7 @@ track = parser.get_notes(mml)
 
 print(f'Parsed {len(track.notes)} notes.\nTotal length: {track.position}')
 
-track.tempo(0.75)
-track.pitch(1.1)
+track.speed(1.1)
 
 out = dsp.buffer(channels=1)
 

@@ -32,3 +32,9 @@ class Track:
     def pitch(self, mult: float):
         for note in self.notes:
             note.frequency *= mult
+
+    def speed(self, mult: float):
+        for note in self.notes:
+            note.position /= mult
+            note.length /= mult
+            note.frequency *= mult
