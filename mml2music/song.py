@@ -23,3 +23,8 @@ class Track:
 
     def rest(self, length: float):
         self.position += length
+
+    def tempo(self, mult: float):
+        for note in self.notes:
+            note.position /= mult
+            note.length /= mult
