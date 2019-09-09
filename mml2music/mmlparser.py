@@ -5,16 +5,21 @@ from .song import Note, Track
 
 class MMLParser:
     def __init__(self, tempo : int = 120, length : int = 4, volume : int = 8, octave : int = 4, regex = None):
+        self.tempo = tempo
+        self.length = length
+        self.volume = volume
+        self.octave = octave
+
         self.pattern = regex or r"\/\*[\s\S]*?\*\/|\/\/.*\n|([tlvornabcdefg])([+\-#]?)(\d*)(\.?)|[<>]|&"
 
     def get_notes(self, mml):
         matches = re.finditer(self.pattern, mml)
 
-        T = 120
-        L = 4
+        T = self.tempo or 120
+        L = self.length or 4
         dotted = False
-        V = 8
-        O = 4
+        V = self.volume or 8
+        O = self.octave or 4
         tie = False
 
         notes = []
