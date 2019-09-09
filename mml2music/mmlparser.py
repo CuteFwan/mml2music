@@ -4,7 +4,7 @@ from .song import Note, Track
 
 
 class MMLParser:
-    def __init__(self, regex = None):
+    def __init__(self, tempo : int = 120, length : int = 4, volume : int = 8, octave : int = 4, regex = None):
         self.pattern = regex or r"\/\*[\s\S]*?\*\/|\/\/.*\n|([tlvornabcdefg])([+\-#]?)(\d*)(\.?)|[<>]|&"
 
     def get_notes(self, mml):
