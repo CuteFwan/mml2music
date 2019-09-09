@@ -12,7 +12,7 @@ class MMLParser:
 
         self.pattern = regex or r"\/\*[\s\S]*?\*\/|\/\/.*\n|([tlvornabcdefg])([+\-#]?)(\d*)(\.?)|[<>]|&"
 
-    def get_notes(self, mml):
+    def get_notes(self, mml, max_length : int = None):
         matches = re.finditer(self.pattern, mml)
 
         T = self.tempo or 120
@@ -82,4 +82,7 @@ class MMLParser:
                     else:
                         freq = tune.ntf(note, o)
                     track.add_note(Note(track.position, freq, length, [V/8]*2))
+                    if max_length and track.position > max_length:
+                        # Max length given and position has exceeded it.
+                        break
         return track
