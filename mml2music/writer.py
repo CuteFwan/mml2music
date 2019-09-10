@@ -15,6 +15,7 @@ class Writer:
             freq = os.path.splitext(file)[0]
             try:
                 self.samples[float(freq)] = dsp.read(f'{self.instrument_path}/{file}')
+                print(self.samples[float(freq)].samplerate)
             except ValueError:
                 # Not a valid number
                 continue
