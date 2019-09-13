@@ -9,14 +9,25 @@ class Note:
 
 class Track:
 
-    def __init__(self):
+    def __init__(self, max_length : int = None, max_notes : int = None):
+        self.max_length = max_length
+        self.max_notes = max_notes
         self.notes = list()
         self.position = 0
 
     def add_note(self, note: Note):
         """Add a new note at the end of the track."""
-        self.notes.append(note)
-        self.position += note.length
+        if self.max_length and self.position + note.length > self.max_length:
+            # raise length error
+            pass
+        elif self.max_notes and self.max_notes > len(self.notes):
+            # raise note count error
+            pass
+        else:
+            self.notes.append(note)
+            self.position += note.length
+
+
 
     def extend_last(self, length: float):
         """Extend the last note in the track."""
