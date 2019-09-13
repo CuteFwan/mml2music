@@ -40,7 +40,11 @@ class Track:
 
     def rest(self, length: float):
         """Add a rest of certain length to the current position of the track."""
-        self.position += length
+        if self.max_length and self.position + length > self.max_length:
+            # raise length error
+            pass
+        else:
+            self.position += length
 
     def tempo(self, mult: float):
         """Modify the tempo of the track independant of the pitch."""
