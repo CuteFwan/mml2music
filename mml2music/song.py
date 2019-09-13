@@ -48,10 +48,14 @@ class Track:
 
     def tempo(self, mult: float):
         """Modify the tempo of the track independant of the pitch."""
-        for note in self.notes:
-            note.position /= mult
-            note.length /= mult
-        self.position /= mult
+        if self.max_length and self.position / mult > self.max_length:
+            # raise length error
+            pass
+        else:
+            for note in self.notes:
+                note.position /= mult
+                note.length /= mult
+            self.position /= mult
 
     def pitch(self, mult: float):
         """Modify the pitch of the track independant of the tempo."""
@@ -60,11 +64,15 @@ class Track:
 
     def speed(self, mult: float):
         """Modify the tempo and pitch of the track at the same time."""
-        for note in self.notes:
-            note.position /= mult
-            note.length /= mult
-            note.frequency *= mult
-        self.position /= mult
+        if self.max_length and self.position / mult > self.max_length:
+            # raise length error
+            pass
+        else:
+            for note in self.notes:
+                note.position /= mult
+                note.length /= mult
+                note.frequency *= mult
+            self.position /= mult
 
     def constrain(self, *, low: float = 0, high: float = 44000):
         """Constrain the note frequencies of the track fo a certain range."""
