@@ -89,9 +89,6 @@ class MMLParser:
                         except ExceededNotes:
                             print("No more notes can be added due to note limit.")
                             break
-                        if max_length and track.position > max_length:
-                            # Max length given and position has exceeded it.
-                            break
                 except ExceededLength:
                     print("No more notes can be added due to length limit.")
                     break

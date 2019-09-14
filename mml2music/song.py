@@ -12,10 +12,11 @@ class Note:
 class Track:
 
     def __init__(self, *, max_length : int = None, max_notes : int = None):
-        self.max_length = max_length
-        self.max_notes = max_notes
+        self.max_length = max_length if (max_length and max_length > 0) else None
+        self.max_notes = max_notes if (max_notes and max_notes > 0) else None
         self.notes = list()
         self.position = 0
+        print(self.max_length, self.max_notes)
 
     def check_length(self, new_length : int):
         """Returns True if new_length exceeds old length"""
