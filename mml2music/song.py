@@ -9,7 +9,7 @@ class Note:
 
 class Track:
 
-    def __init__(self, max_length : int = None, max_notes : int = None):
+    def __init__(self, *, max_length : int = None, max_notes : int = None):
         self.max_length = max_length
         self.max_notes = max_notes
         self.notes = list()

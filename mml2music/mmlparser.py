@@ -24,7 +24,7 @@ class MMLParser:
 
         notes = []
         pos = 0
-        track = Track()
+        track = Track(max_length = max_length)
 
 
         for m in matches:
