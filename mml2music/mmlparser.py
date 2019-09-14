@@ -1,6 +1,8 @@
 from pippi import tune
 import re
 from .song import Note, Track
+from .errors import *
+
 
 
 class MMLParser:
@@ -49,40 +51,44 @@ class MMLParser:
                 O = int(m[3])
 
             elif m[1] in 'abcdefgrn':
-                if m[1] == 'n':
-                    length = 240 / (L * T)
-                else:
-                    length = 240 / ((int(m[3]) if m[3] else L) * T)
-                if dotted or m[4]:
-                    length *= 1.5
-                if tie:
-                    #tie
-                    track.extend_last(length)
-                    tie = False
-                elif m[1] == 'r':
-                    #do nothing, advence position
-                    track.rest(length)
-                else:
-                    #every other note
-                    note = m[1]
-                    if m[2] in {'+', '#'}:
-                        note += '#'
-                    elif m[2] == '-':
-                        note += 'b'
+                try:
+                    if m[1] == 'n':
+                        length = 240 / (L * T)
+                    else:
+                        length = 240 / ((int(m[3]) if m[3] else L) * T)
+                    if dotted or m[4]:
+                        length *= 1.5
+                    if tie:
+                        #tie
+                        track.extend_last(length)
+                        tie = False
+                    elif m[1] == 'r':
+                        #do nothing, advence position
+                        track.rest(length)
+                    else:
+                        #every other note
+                        note = m[1]
+                        if m[2] in {'+', '#'}:
+                            note += '#'
+                        elif m[2] == '-':
+                            note += 'b'
 
-                    if note == 'cb':
-                        o = O-1
-                    elif note == 'b#':
-                        o = O+1
-                    else:
-                        o = O
-                    if note == 'n':
-                        # Handle midi notes
-                        freq = tune.mtof(note+m[3])
-                    else:
-                        freq = tune.ntf(note, o)
-                    track.add_note(Note(track.position, freq, length, [V/8]*2))
-                    if max_length and track.position > max_length:
-                        # Max length given and position has exceeded it.
-                        break
+                        if note == 'cb':
+                            o = O-1
+                        elif note == 'b#':
+                            o = O+1
+                        else:
+                            o = O
+                        if note == 'n':
+                            # Handle midi notes
+                            freq = tune.mtof(note+m[3])
+                        else:
+                            freq = tune.ntf(note, o)
+                        track.add_note(Note(track.position, freq, length, [V/8]*2))
+                        if max_length and track.position > max_length:
+                            # Max length given and position has exceeded it.
+                            break
+                except ExceededLength:
+                    print("No more notes can be added")
+                    break
         return track

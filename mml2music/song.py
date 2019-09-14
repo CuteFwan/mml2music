@@ -1,3 +1,5 @@
+from .errors import *
+
 class Note:
     __slots__ = ('position', 'frequency', 'length', 'volume')
 
@@ -22,7 +24,7 @@ class Track:
     def add_note(self, note: Note):
         """Add a new note at the end of the track."""
         if self.check_length(self.position + note.length):
-            # raise length error
+            raise ExceededLength("Adding note would exceed length limit.")
             pass
         elif self.max_notes and self.max_notes > len(self.notes):
             # raise note count error
@@ -36,8 +38,7 @@ class Track:
     def extend_last(self, length: float):
         """Extend the last note in the track."""
         if self.check_length(self.position + length):
-            # raise length error
-            pass
+            raise ExceededLength("Extending last note would exceed length limit.")
         else:
             self.notes[-1].length += length
             self.position += length
@@ -45,7 +46,7 @@ class Track:
     def rest(self, length: float):
         """Add a rest of certain length to the current position of the track."""
         if self.check_length(self.position + length):
-            # raise length error
+            raise ExceededLength("Adding rest would exceed length limit.")
             pass
         else:
             self.position += length
@@ -53,7 +54,7 @@ class Track:
     def tempo(self, mult: float):
         """Modify the tempo of the track independant of the pitch."""
         if self.check_length(self.position / mult):
-            # raise length error
+            raise ExceededLength("Modifying tempo would exceed length limit.")
             pass
         else:
             for note in self.notes:
@@ -69,7 +70,7 @@ class Track:
     def speed(self, mult: float):
         """Modify the tempo and pitch of the track at the same time."""
         if self.check_length(self.position / mult):
-            # raise length error
+            raise ExceededLength("Modifying speed would exceed length limit.")
             pass
         else:
             for note in self.notes:
