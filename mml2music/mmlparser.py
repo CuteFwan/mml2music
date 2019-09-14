@@ -14,7 +14,7 @@ class MMLParser:
 
         self.pattern = regex or r"\/\*[\s\S]*?\*\/|\/\/.*\n|([tlvornabcdefg])([+\-#]?)(\d*)(\.?)|[<>]|&"
 
-    def get_notes(self, mml, max_length : int = None):
+    def get_notes(self, mml : str, *, max_length : int = None, max_notes : int = None):
         matches = re.finditer(self.pattern, mml)
 
         T = self.tempo or 120
@@ -26,7 +26,7 @@ class MMLParser:
 
         notes = []
         pos = 0
-        track = Track(max_length = max_length)
+        track = Track(max_length = max_length, max_notes = max_notes)
 
 
         for m in matches:

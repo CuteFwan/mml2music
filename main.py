@@ -6,7 +6,7 @@ with open('input.mml', 'r') as file:
 
 parser = mml2music.MMLParser()
 
-track = parser.get_notes(mml, 30)
+track = parser.get_notes(mml, max_length = 40, max_notes = 172)
 
 print(f'Parsed {len(track.notes)} notes.\nTotal length: {track.position}')
 
