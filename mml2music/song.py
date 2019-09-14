@@ -15,6 +15,12 @@ class Track:
         self.notes = list()
         self.position = 0
 
+    def check_length(self, new_length : int):
+        if self.max_length and new_length > self.max_length:
+            return False
+        else:
+            return True
+
     def add_note(self, note: Note):
         """Add a new note at the end of the track."""
         if self.max_length and self.position + note.length > self.max_length:
