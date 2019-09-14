@@ -16,14 +16,12 @@ class Track:
         self.position = 0
 
     def check_length(self, new_length : int):
-        if self.max_length and new_length > self.max_length:
-            return False
-        else:
-            return True
+        """Returns True if new_length exceeds old length"""
+        return self.max_length and new_length > self.max_length
 
     def add_note(self, note: Note):
         """Add a new note at the end of the track."""
-        if self.max_length and self.position + note.length > self.max_length:
+        if self.check_length(self.position + note.length):
             # raise length error
             pass
         elif self.max_notes and self.max_notes > len(self.notes):
@@ -37,7 +35,7 @@ class Track:
 
     def extend_last(self, length: float):
         """Extend the last note in the track."""
-        if self.max_length and self.position + length > self.max_length:
+        if self.check_length(self.position + length):
             # raise length error
             pass
         else:
@@ -46,7 +44,7 @@ class Track:
 
     def rest(self, length: float):
         """Add a rest of certain length to the current position of the track."""
-        if self.max_length and self.position + length > self.max_length:
+        if self.check_length(self.position + length):
             # raise length error
             pass
         else:
@@ -54,7 +52,7 @@ class Track:
 
     def tempo(self, mult: float):
         """Modify the tempo of the track independant of the pitch."""
-        if self.max_length and self.position / mult > self.max_length:
+        if self.check_length(self.position / mult):
             # raise length error
             pass
         else:
@@ -70,7 +68,7 @@ class Track:
 
     def speed(self, mult: float):
         """Modify the tempo and pitch of the track at the same time."""
-        if self.max_length and self.position / mult > self.max_length:
+        if self.check_length(self.position / mult):
             # raise length error
             pass
         else:
