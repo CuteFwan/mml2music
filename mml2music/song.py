@@ -27,7 +27,7 @@ class Track:
             raise ExceededLength("Adding note would exceed length limit.")
             pass
         elif self.max_notes and self.max_notes > len(self.notes):
-            # raise note count error
+            raise ExceededNotes("Adding note would exceed note limit.")
             pass
         else:
             self.notes.append(note)
