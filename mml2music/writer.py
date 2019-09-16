@@ -1,5 +1,7 @@
 import os
 from pippi import dsp
+from io import BytesIO
+import soundfile
 
 from .song import Note, Track
 
@@ -74,4 +76,10 @@ class Writer:
             i += 1
 
     def export(self, path):
-        self.buffer.write(path)
+        if isinstance(path, str):
+            self.buffer.write(path)
+        elif isinstance(path, BytesIO):
+            output = BytesIO()
+            soundfile.write(output, self.buffer.frames, self.buffer.samplerate, subtype='PCM_16', format='WAV')
+            output.seek(0)
+            return output
