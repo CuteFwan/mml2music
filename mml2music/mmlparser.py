@@ -84,11 +84,8 @@ class MMLParser:
                             freq = tune.mtof(note+m[3])
                         else:
                             freq = tune.ntf(note, o)
-                        try:
-                            track.add_note(Note(track.position, freq, length, [V/8]*2))
-                        except ExceededNotes:
-                            print("No more notes can be added due to note limit.")
-                            break
+                            
+                        track.add_note(Note(track.position, freq, length, [V/8]*2))
                 except ExceededLength:
                     print("No more notes can be added due to length limit.")
                     break
