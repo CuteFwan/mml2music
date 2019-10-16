@@ -6,11 +6,11 @@ with open('input.mml', 'r') as file:
 
 parser = mml2music.MMLParser()
 
-track = parser.get_notes(mml, max_length = -1, max_notes = 160)
+track = parser.get_notes(mml, max_length = -1, max_notes = 200)
 
 print(f'Parsed {len(track.notes)} notes.\nTotal length: {track.position}')
 
-track.speed(1.1)
+track.reverse()
 
 out = dsp.buffer(channels=1, samplerate=48000)
 
@@ -18,6 +18,6 @@ writer = mml2music.Writer('flute', out)
 
 writer.compose(track)
 
-writer.export('renders/output48.wav')
+writer.export('renders/output48_reversed.wav')
 
 print('Done!')
