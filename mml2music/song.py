@@ -92,3 +92,11 @@ class Track:
     def constrain(self, *, low: float = 0, high: float = 44000):
         """Constrain the note frequencies of the track fo a certain range."""
         self.notes = [note for note in self.notes if low <= note.frequency <= high]
+
+    def reverse(self):
+        new_notes = []
+        for note in self.notes[::-1]:
+            note.position = self.position - note.position - note.length
+            new_notes.append(note)
+        del self.notes[:]
+        self.notes = new_notes
