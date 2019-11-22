@@ -7,9 +7,9 @@ from .song import Note, Track
 
 class Writer:
 
-    def __init__(self, instrument: str, buffer):
+    def __init__(self, instrument_path: str, buffer):
         self.instrument = instrument
-        self.instrument_path = f'{os.path.dirname(os.path.abspath(__file__))}/sounds/{instrument}'
+        self.instrument_path = instrument_path
         self.samples = dict()
         self.buffer = buffer
 
