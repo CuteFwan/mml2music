@@ -1,5 +1,5 @@
-renders/*.wav
-renders/*.mp3
+tests/renders/*.wav
+tests/renders/*.mp3
 *.mml
 
 # Byte-compiled / optimized / DLL files

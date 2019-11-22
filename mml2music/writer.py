@@ -8,7 +8,6 @@ from .song import Note, Track
 class Writer:
 
     def __init__(self, instrument_path: str, buffer):
-        self.instrument = instrument
         self.instrument_path = instrument_path
         self.samples = dict()
         self.buffer = buffer
